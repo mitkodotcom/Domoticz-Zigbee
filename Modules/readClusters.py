@@ -3781,6 +3781,8 @@ def Cluster0702(self, Devices, MsgSQN, MsgSrcAddr, MsgSrcEp, MsgClusterId, MsgAt
     elif MsgAttrID == "0001":  # CURRENT_SUMMATION_RECEIVED
         self.log.logging("Cluster", "Log", "Cluster0702 - CURRENT_SUMMATION_RECEIVED %s " % (value), MsgSrcAddr)
         checkAndStoreAttributeValue(self, MsgSrcAddr, MsgSrcEp, MsgClusterId, MsgAttrID, value)
+        if "Model" in self.ListOfDevices[MsgSrcAddr] and self.ListOfDevices[MsgSrcAddr]["Model"] == "ZLinky_TIC":
+            MajDomoDevice(self, Devices, MsgSrcAddr, MsgSrcEp, "0702", str(value), Attribute_=MsgAttrID)
 
     elif MsgAttrID == "0002":  # Current Max Demand Delivered
         self.log.logging(
@@ -4979,7 +4981,7 @@ def Clusterff66(self, Devices, MsgSQN, MsgSrcAddr, MsgSrcEp, MsgClusterId, MsgAt
 
     if 'ZLinky' not in self.ListOfDevices[ MsgSrcAddr ]:
         self.ListOfDevices[ MsgSrcAddr ]['ZLinky'] = {}
-        
+
     if MsgAttrID == "0000":
         # Option tarifaire
         checkAndStoreAttributeValue(self, MsgSrcAddr, MsgSrcEp, MsgClusterId, MsgAttrID, decodeAttribute(self, MsgAttType, MsgClusterData))
@@ -5078,3 +5080,4 @@ def Clusterff66(self, Devices, MsgSQN, MsgSrcAddr, MsgSrcEp, MsgClusterId, MsgAt
             "ReadCluster %s - %s/%s Attribute: %s Type: %s Size: %s Data: %s / Value: %s" % (MsgClusterId, MsgSrcAddr, MsgSrcEp, MsgAttrID, MsgAttType, MsgAttSize, MsgClusterData, value),
             MsgSrcAddr,
         )
+        MajDomoDevice(self, Devices, MsgSrcAddr, MsgSrcEp, "0702", str(value), Attribute_=MsgAttrID)

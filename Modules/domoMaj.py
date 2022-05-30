@@ -238,7 +238,7 @@ def MajDomoDevice(self, Devices, NWKID, Ep, clusterID, value, Attribute_="", Col
                 self.log.logging("Widget", "Debug", "------>  P1Meter : " + sValue, NWKID)
                 UpdateDevice_v2(self, Devices, DeviceUnit, 0, str(sValue), BatteryLevel, SignalLevel)
 
-            if WidgetType == "P1Meter_ZL" and "Model" in self.ListOfDevices[NWKID] and self.ListOfDevices[NWKID]["Model"] == "ZLinky_TIC" and Attribute_ in ("0100", "0102", "0104", "0106", "0108", "010a", "050f"):
+            if WidgetType == "P1Meter_ZL" and "Model" in self.ListOfDevices[NWKID] and self.ListOfDevices[NWKID]["Model"] == "ZLinky_TIC" and Attribute_ in ("0100", "0102", "0104", "0106", "0108", "010a", "050f", "0001", "0207"):
  
                 if Attribute_ != "050f" and Ep == "01" and Attribute_ not in ("0100", "0102"):
                     # Ep = 01, so we store Base, or HP,HC, or BBRHCJB, BBRHPJB
@@ -256,10 +256,26 @@ def MajDomoDevice(self, Devices, NWKID, Ep, clusterID, value, Attribute_="", Col
                 self.log.logging("Widget", "Debug", "------>  P1Meter_ZL : %s (%s)" % (value, type(value)), NWKID)
                 # P1Meter report Instant and Cummulative Power.
                 # We need to retreive the Cummulative Power.
-                cur_usage1, cur_usage2, cur_return1, cur_return2, cons, prod = retreive_data_from_current(self, Devices, DeviceUnit, "0;0;0;0;0;0")
+                cur_usage1, cur_usage2, cur_return1, cur_return2, cons, cur_prod = retreive_data_from_current(self, Devices, DeviceUnit, "0;0;0;0;0;0")
                 usage1 = usage2 = return1 = return2 = cons = prod = 0
 
-                if Attribute_ == "050f":
+                if Attribute_ == "0001":
+                    # We are receing return1 (Summation)
+                    usage1 = cur_usage1
+                    usage2 = cur_usage2
+                    return1 = round(float(value),2)
+                    return2 = cur_return2
+                    prod = cur_prod
+                    
+                elif Attribute_ == "0207":
+                    # We are receiving return2 ( Instant )
+                    usage1 = cur_usage1
+                    usage2 = cur_usage2
+                    return1 = cur_return1
+                    return2 = cur_return2
+                    prod = round(float(value), 2)
+                    
+                elif Attribute_ == "050f":
                     self.log.logging(
                         "Widget",
                         "Debug",
