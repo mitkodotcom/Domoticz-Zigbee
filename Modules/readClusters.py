@@ -4297,6 +4297,16 @@ def Cluster0b04(self, Devices, MsgSQN, MsgSrcAddr, MsgSrcEp, MsgClusterId, MsgAt
                 return
         checkAndStoreAttributeValue(self, MsgSrcAddr, MsgSrcEp, MsgClusterId, MsgAttrID, value)
 
+    elif MsgAttrID in ( "0305", "050e", "090e", "0a0e",): # Production Energie Reactive VArh
+        value = int(decodeAttribute(self, MsgAttType, MsgClusterData))
+        checkAndStoreAttributeValue(self, MsgSrcAddr, MsgSrcEp, MsgClusterId, MsgAttrID, value)
+        self.log.logging(
+            "Cluster",
+            "Log",
+            "ReadCluster %s - %s/%s Attribute: %s Type: %s Size: %s Data: %s" % (MsgClusterId, MsgSrcAddr, MsgSrcEp, MsgAttrID, MsgAttType, MsgAttSize, MsgClusterData),
+            MsgSrcAddr,
+        )
+    
     elif MsgAttrID == "050d":
         # Max Tri Power reached
         value = int(decodeAttribute(self, MsgAttType, MsgClusterData))
