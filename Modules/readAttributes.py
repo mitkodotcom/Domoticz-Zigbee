@@ -1371,7 +1371,7 @@ def ReadAttributeRequest_0702_ZLinky_TIC(self, key):
     EPout = "01"
 
     tarif = None
-    listAttributes = [0x0020, 0x0100, 0x0102, 0x0104, 0x0106, 0x0108, 0x10A]
+    listAttributes = [0x0001, 0x0020, 0x0100, 0x0102, 0x0104, 0x0106, 0x0108, 0x10A]
     if "ff66" in self.ListOfDevices[key]["Ep"]["01"] and "0000" in self.ListOfDevices[key]["Ep"]["01"]["ff66"]:
         if self.ListOfDevices[key]["Ep"]["01"]["ff66"]["0000"] not in ("", {}):
             tarif = self.ListOfDevices[key]["Ep"]["01"]["ff66"]["0000"]
